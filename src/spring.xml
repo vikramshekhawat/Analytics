@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cassandra="http://www.springframework.org/schema/data/cassandra"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/data/cassandra http://www.springframework.org/schema/data/cassandra/spring-cassandra-1.5.xsd
+    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+<!-- 	<cassandra:cluster id="cassandraCluster"
+		contact-points="${cassandra.contactpoints}" port="${cassandra.port}" />
+	<cassandra:converter />
+	<cassandra:session id="cassandraSession" cluster-ref="cassandraCluster"
+		keyspace-name="${cassandra.keyspace}" />
+	<cassandra:template id="cqlTemplate" />
+	<cassandra:mapping entity-base-packages="googleAnalytics.bean.dataSet1" /> -->
+
+	<context:annotation-config />
+
+	<bean id="cassandraCredentials" class="googleAnalytics.bean.CassandraCredentials">
+		<constructor-arg name="contactpoint" value="${cassandra.contactpoints}" />
+		<constructor-arg name="db" value="${cassandra.keyspace}" />
+		<constructor-arg name="port" value="${cassandra.port}" />
+	</bean>
+
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${mysqlDriver}" />
+		<property name="url" value="${mysql.url}" />
+		<property name="username" value="${mysql.username}" />
+		<property name="password" value="${mysql.password}" />
+	</bean>
+	<bean id="googleAnalyticsCassandraDao" class="googleAnalytics.DaoImpl.GoogleAnalyticsCassandraCrudImpl">
+		<constructor-arg ref="cassandraCredentials" />
+		<constructor-arg ref="environmentClass" />
+	</bean>
+	<bean id="environmentClass" class="googleAnalytics.Env.EnvironmentClass" />
+	
+<!-- Data Set Factory, which creates the custom bean factory for all service class-->
+	<bean id="dataSetFactory" class ="googleAnalytics.Service.DataSetFactory"/>
+	
+<!-- Bean creation of DataSet 1 -->
+	<bean id="channelService" class="googleAnalytics.ServiceImpl.dataSet1.ChannelServiceImpl" /> 
+	<bean id="deviceService" class="googleAnalytics.ServiceImpl.dataSet1.DeviceServiceImpl" /> 
+	<bean id="sessionService" class="googleAnalytics.ServiceImpl.dataSet1.SessionServiceImpl" /> 
+	<bean id="top20PagesService" class="googleAnalytics.ServiceImpl.dataSet1.Top20PagesServiceImpl" /> 
+	<bean id="trafficBreakDown30DaysService" class="googleAnalytics.ServiceImpl.dataSet1.TrafficBreakDown30DaysServiceImpl" /> 
+	<bean id="trafficBreakDownService" class="googleAnalytics.ServiceImpl.dataSet1.TrafficBreakDownServiceImpl" /> 
+	<bean id="trafficSummaryService" class="googleAnalytics.ServiceImpl.dataSet1.TrafficSummaryServiceImpl" /> 
+	<bean id="ppcAllYearService" class="googleAnalytics.ServiceImpl.dataSet1.PpcAllYearServiceImpl" /> 
+ 	<bean id="conversionsPPCService" class="googleAnalytics.ServiceImpl.dataSet1.ConversionsPPCServiceImpl" /> 
+ 	<bean id="currencyService" class="googleAnalytics.ServiceImpl.dataSet1.CurrencyServiceImpl" />
+
+<!-- Bean creation of DataSet 2 -->
+	<bean id="conversionsALLService" class="googleAnalytics.ServiceImpl.dataSet2.ConversionsALLServiceImpl" /> 
+	<bean id="convOverviewPPCService" class="googleAnalytics.ServiceImpl.dataSet2.ConvOverviewPPCServiceImpl" /> 
+	<bean id="convOverviewService" class="googleAnalytics.ServiceImpl.dataSet2.ConvOverviewServiceImpl" /> 
+	<bean id="convOverviewWithDimensionsService" class="googleAnalytics.ServiceImpl.dataSet2.ConvOverviewWithDimensionsServiceImpl" /> 
+	<bean id="convPPCa30Service" class="googleAnalytics.ServiceImpl.dataSet2.ConvPPCa30ServiceImpl" /> 
+	<bean id="convRateAvgValueService" class="googleAnalytics.ServiceImpl.dataSet2.ConvRateAvgValueServiceImpl" /> 
+	<bean id="cPC30Service" class="googleAnalytics.ServiceImpl.dataSet2.CPC30ServiceImpl" /> 
+	<bean id="direct30Service" class="googleAnalytics.ServiceImpl.dataSet2.Direct30ServiceImpl" /> 
+	<bean id="ecomAllYearService" class="googleAnalytics.ServiceImpl.dataSet2.EcomAllYearServiceImpl" /> 
+	<bean id="ecomTransactions30directService" class="googleAnalytics.ServiceImpl.dataSet2.EcomTransactions30directServiceImpl" /> 
+	<bean id="ecomTransactions30organicService" class="googleAnalytics.ServiceImpl.dataSet2.EcomTransactions30organicServiceImpl" /> 
+	<bean id="ecomTransactions30PPCService" class="googleAnalytics.ServiceImpl.dataSet2.EcomTransactions30PPCServiceImpl" /> 
+	<bean id="ecomTransactions30Service" class="googleAnalytics.ServiceImpl.dataSet2.EcomTransactions30ServiceImpl" /> 
+	<bean id="goalCompletion1Service" class="googleAnalytics.ServiceImpl.dataSet2.GoalCompletion1ServiceImpl" /> 
+	<bean id="goalCompletion2Service" class="googleAnalytics.ServiceImpl.dataSet2.GoalCompletion2ServiceImpl" /> 
+	<bean id="goalCompletion3Service" class="googleAnalytics.ServiceImpl.dataSet2.GoalCompletion3ServiceImpl" /> 
+	<bean id="goalCompletion4Service" class="googleAnalytics.ServiceImpl.dataSet2.GoalCompletion4ServiceImpl" /> 
+	<bean id="goalCompletion5Service" class="googleAnalytics.ServiceImpl.dataSet2.GoalCompletion5ServiceImpl" /> 
+	<bean id="organic30Service" class="googleAnalytics.ServiceImpl.dataSet2.Organic30ServiceImpl" /> 
+	<bean id="ppcConversionService" class="googleAnalytics.ServiceImpl.dataSet2.PpcConversionServiceImpl" />
+	<bean id="topProductsService" class="googleAnalytics.ServiceImpl.dataSet2.TopProductsServiceImpl" /> 
+	<bean id="totalAdSpendService" class="googleAnalytics.ServiceImpl.dataSet2.TotalAdSpendServiceImpl" /> 
+	<bean id="totalEcommerceRevenueService" class="googleAnalytics.ServiceImpl.dataSet2.TotalEcommerceRevenueServiceImpl" />
+	
+	<bean id="dao" class="googleAnalytics.DaoImpl.GoogleAnalyticsMiscellaneousInformation">
+		<constructor-arg ref="dataSource" />
+	</bean>
+
+	<!-- Property configurer -->
+	<bean class ="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations" value="ads.properties" />
+	</bean>
+	
+</beans>
